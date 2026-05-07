@@ -1,20 +1,22 @@
 # Application Profile
 
 ## Innholdsfortegnelse
-- [Application Profile](#application-profile)
-  - [Namespaces](#namespaces)
-  - [Conceptual Model](#conceptual-model)
-  - [Class TradeAgreement](#class-tradeagreement)
-  - [Class EconomicOperator](#class-economicoperator)
-  - [Class Identifier](#class-identifier)
-  - [Class IdentifierType](#class-identifiertype)
-  - [Class PaymentTerms](#class-paymentterms)
-  - [Class MonetaryAmount](#class-monetaryamount)
-  - [Class PaymentDueCondition](#class-paymentduecondition)
-  - [Class DeliveryTerms](#class-deliveryterms)
-  - [Class DeliveryLocation](#class-deliverylocation)
-  - [Class Address](#class-address)
-  - [Code Lists](#code-lists)
+- #application-profile
+  - #namespaces
+  - #conceptual-model
+  - #class-tradeagreement
+  - #class-economicoperator
+  - #class-identifier
+  - #class-identifiertype
+  - #class-paymentterms
+  - #class-monetaryamount
+  - #class-paymentduecondition
+  - #class-deliveryterms
+  - #class-deliverylocation
+  - #class-address
+  - #class-currencycode
+  - #class-incotermcode
+  - #class-eventcode
 
 ---
 
