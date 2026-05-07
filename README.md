@@ -1,117 +1,224 @@
 # Application Profile
 
 ## Innholdsfortegnelse
-- #application-profile
-  - #namespaces
-  - #conceptual-model
-  - #class-tradeagreement
-  - #class-economicoperator
-  - #class-identifier
-  - #class-identifiertype
-  - #class-paymentterms
-  - #class-monetaryamount
-  - #class-paymentduecondition
-  - #class-deliveryterms
-  - #class-deliverylocation
-  - #class-address
-  - #class-currencycode
-  - #class-incotermcode
-  - #class-eventcode
+- [Application Profile](#application-profile)
+  - [Namespaces](#namespaces)
+  - [Conceptual Model (Tabular ER view)](#conceptual-model-tabular-er-view)
+  - [Class TradeAgreement](#class-tradeagreement)
+  - [Class EconomicOperator](#class-economicoperator)
+  - [Class Identifier](#class-identifier)
+  - [Class IdentifierType](#class-identifiertype)
+  - [Class PaymentTerms](#class-paymentterms)
+  - [Class MonetaryAmount](#class-monetaryamount)
+  - [Class PaymentDueCondition](#class-paymentduecondition)
+  - [Class DeliveryTerms](#class-deliveryterms)
+  - [Class DeliveryLocation](#class-deliverylocation)
+  - [Class Address](#class-address)
+  - [Class CurrencyCode](#class-currencycode)
+  - [Class IncotermCode](#class-incotermcode)
+  - [Class EventCode](#class-eventcode)
+  - [Controlled vocabularies](#controlled-vocabularies)
 
 ---
 
 ## Namespaces
 
+```mdoc
 | Prefix | Namespace |
 |-------|----------|
-| ebwv | https://w3id.org/ebwv# |
-| xsd | http://www.w3.org/2001/XMLSchema# |
-| skos | http://www.w3.org/2004/02/skos/core# |
+| ebwv  | https://w3id.org/ebwv# |
+| xsd   | http://www.w3.org/2001/XMLSchema# |
+| skos  | http://www.w3.org/2004/02/skos/core# |
+```
 
 ---
 
-## Conceptual Model
+## Conceptual Model (Tabular ER view)
 
 ```mermaid
-classDiagram
-    class TradeAgreement {
-        identifier : xsd:string [0..1]
-        agreementDate : xsd:dateTime [1]
-        buyer : EconomicOperator [1]
-        supplier : EconomicOperator [1]
-        hasPaymentTerms : PaymentTerms [1]
-        hasDeliveryTerms : DeliveryTerms [1]
+erDiagram
+    TradeAgreement {
+        string identifier
+        datetime agreementDate
     }
 
-    class EconomicOperator {
-        identifier : Identifier [1]
+    EconomicOperator {
+        string identifier
     }
 
-    class Identifier {
-        value : xsd:string [1]
-        type : IdentifierType [1..*]
+    Identifier {
+        string value
+        string type
     }
 
-    class IdentifierType {
-        code : skos:prefLabel [1]
+    IdentifierType {
+        string code
     }
 
-    class PaymentTerms {
-        transactionAmount : MonetaryAmount [1]
-        hasPaymentDueCondition : PaymentDueCondition [1]
+    PaymentTerms {
+        decimal transactionAmount
     }
 
-    class MonetaryAmount {
-        value : xsd:decimal [0..1]
-        currency : CurrencyCode [1]
+    MonetaryAmount {
+        decimal value
+        string currency
     }
 
-    class PaymentDueCondition {
-        paymentReferenceEvent : EventCode [1]
-        paymentDueDuration : xsd:duration [1]
+    PaymentDueCondition {
+        string paymentReferenceEvent
+        duration paymentDueDuration
     }
 
-    class DeliveryTerms {
-        incoterm : IncotermCode [1..*]
-        deliveryLocation : DeliveryLocation [0..1]
+    DeliveryTerms {
+        string incoterm
+        string deliveryLocation
     }
 
-    class DeliveryLocation {
-        address : Address [1]
+    DeliveryLocation {
+        string address
     }
 
-    class Address {
-        fullAddress : xsd:string [0..1]
-        thoroughfare : xsd:string [0..1]
-        locatorDesignation : xsd:string [0..1]
-        addressArea : xsd:string [0..1]
-        postName : xsd:string [1]
-        locatorName : xsd:string [0..1]
-        adminUnitL2 : xsd:string [1]
-        adminUnitL1 : xsd:string [1]
-        postCode : xsd:string [1]
+    Address {
+        string fullAddress
+        string thoroughfare
+        string locatorDesignation
+        string addressArea
+        string postName
+        string locatorName
+        string adminUnitL2
+        string adminUnitL1
+        string postCode
     }
 
-    class CurrencyCode {
-        (skos:Concept)
-        code : skos:prefLabel [1]
+    CurrencyCode {
+        string code
     }
 
-    class IncotermCode {
-        (skos:Concept)
-        code : skos:prefLabel [1]
+    IncotermCode {
+        string code
     }
 
-    class EventCode {
-        (skos:Concept)
-        code : skos:prefLabel [1]
+    EventCode {
+        string code
     }
 
-    TradeAgreement --> EconomicOperator : buyer
-    TradeAgreement --> EconomicOperator : supplier
-    TradeAgreement --> PaymentTerms : hasPaymentTerms
-    TradeAgreement --> DeliveryTerms : hasDeliveryTerms
-    PaymentTerms --> MonetaryAmount : transactionAmount
-    PaymentTerms --> PaymentDueCondition : hasPaymentDueCondition
-    DeliveryTerms --> DeliveryLocation : deliveryLocation
-    DeliveryLocation --> Address : address
+    TradeAgreement ||--|| EconomicOperator : buyer
+    TradeAgreement ||--|| EconomicOperator : supplier
+    TradeAgreement ||--|| PaymentTerms : hasPaymentTerms
+    TradeAgreement ||--|| DeliveryTerms : hasDeliveryTerms
+
+    PaymentTerms ||--|| MonetaryAmount : transactionAmount
+    PaymentTerms ||--|| PaymentDueCondition : hasPaymentDueCondition
+
+    MonetaryAmount }o--|| CurrencyCode : currency
+    PaymentDueCondition }o--|| EventCode : paymentReferenceEvent
+    DeliveryTerms }o--|| IncotermCode : incoterm
+    DeliveryTerms }o--o| DeliveryLocation : deliveryLocation
+    DeliveryLocation ||--|| Address : address
+
+    EconomicOperator ||--o{ Identifier : hasIdentifier
+    Identifier ||--|| IdentifierType : type
+```
+
+---
+
+## Class TradeAgreement
+
+```mdoc
+URI: ebwv:TradeAgreement
+Requirement Level: Mandatory
+
+| Property         | URI                   | Range                 | Mult. | Req.      | Description                               | Note | Usage note |
+|------------------|-----------------------|-----------------------|-------|-----------|-------------------------------------------|------|-----------|
+| identifier       | ebwv:identifier       | xsd:string            | 0..1  | Optional  | Identifier of the agreement               |      | External identifier if available |
+| agreementDate    | ebwv:agreementDate    | xsd:dateTime          | 1     | Mandatory | Date agreement becomes effective          |      | Legally binding date |
+| buyer            | ebwv:buyer            | ebwv:EconomicOperator | 1     | Mandatory | Buyer party                               |      | |
+| supplier         | ebwv:supplier         | ebwv:EconomicOperator | 1     | Mandatory | Supplier party                            |      | |
+| hasPaymentTerms  | ebwv:hasPaymentTerms  | ebwv:PaymentTerms     | 1     | Mandatory | Payment terms                             |      | Exactly one per agreement |
+| hasDeliveryTerms | ebwv:hasDeliveryTerms | ebwv:DeliveryTerms    | 1     | Mandatory | Delivery terms                            |      | Exactly one per agreement |
+```
+
+---
+
+## Class EconomicOperator
+
+```mdoc
+URI: ebwv:EconomicOperator
+Requirement Level: Mandatory
+
+| Property    | URI             | Range          | Mult. | Req.      | Description                          | Note | Usage note |
+|------------|------------------|----------------|-------|-----------|--------------------------------------|------|-----------|
+| identifier | ebwv:identifier  | ebwv:Identifier| 1     | Mandatory | Identifier of the economic operator  |      | At least one identifier MUST be provided |
+```
+
+---
+
+## Class Identifier
+
+```mdoc
+URI: ebwv:Identifier
+Requirement Level: Mandatory
+
+| Property | URI        | Range              | Mult. | Req.      | Description          | Note | Usage note |
+|---------|------------|--------------------|-------|-----------|----------------------|------|-----------|
+| value   | ebwv:value | xsd:string         | 1     | Mandatory | Identifier value     |      | |
+| type    | ebwv:type  | ebwv:IdentifierType| 1..*  | Mandatory | Identifier type      | Value MUST be selected from a controlled vocabulary | See IdentifierType |
+```
+
+---
+
+## Class IdentifierType
+
+```mdoc
+URI: ebwv:IdentifierType
+Requirement Level: Mandatory
+
+| Property | URI            | Range      | Mult. | Req.      | Description              | Note | Usage note |
+|---------|-----------------|------------|-------|-----------|--------------------------|------|-----------|
+| code    | skos:prefLabel  | xsd:string | 1     | Mandatory | Identifier type label    | Value MUST be selected from a controlled vocabulary (Vocabulary: Identifier Type Code List, URI: https://w3id.org/ebwv/codelist/identifier-type) | Application-specific scheme list |
+```
+
+---
+
+## Class PaymentTerms
+
+```mdoc
+URI: ebwv:PaymentTerms
+Requirement Level: Mandatory
+
+| Property               | URI                     | Range                  | Mult. | Req.      | Description          | Note | Usage note |
+|------------------------|--------------------------|------------------------|-------|-----------|----------------------|------|-----------|
+| transactionAmount      | ebwv:transactionAmount   | ebwv:MonetaryAmount    | 1     | Mandatory | Amount to be paid    |      | |
+| hasPaymentDueCondition | ebwv:hasPaymentDueCondition | ebwv:PaymentDueCondition | 1  | Mandatory | When payment is due  |      | |
+```
+
+---
+
+## Class MonetaryAmount
+
+```mdoc
+URI: ebwv:MonetaryAmount
+Requirement Level: Mandatory
+
+| Property  | URI          | Range             | Mult. | Req.      | Description      | Note | Usage note |
+|----------|--------------|-------------------|-------|-----------|------------------|------|-----------|
+| value    | ebwv:value   | xsd:decimal       | 0..1  | Optional  | Numeric value    |      | |
+| currency | ebwv:currency| ebwv:CurrencyCode | 1     | Mandatory | Currency         | Value MUST be selected from a controlled vocabulary: ISO 4217 Currency Codes (URI: http://publications.europa.eu/resource/authority/currency) | Use alphabetic codes |
+```
+
+---
+
+## Class PaymentDueCondition
+
+```mdoc
+URI: ebwv:PaymentDueCondition
+Requirement Level: Mandatory
+
+| Property              | URI                     | Range          | Mult. | Req.      | Description                 | Note | Usage note |
+|-----------------------|--------------------------|----------------|-------|-----------|-----------------------------|------|-----------|
+| paymentReferenceEvent | ebwv:paymentReferenceEvent| ebwv:EventCode | 1     | Mandatory | Triggering reference event  | Value MUST be selected from a controlled vocabulary: Payment Reference Event Code List (URI: https://w3id.org/ebwv/codelist/payment-reference-event) | Domain-specific events |
+| paymentDueDuration    | ebwv:paymentDueDuration  | xsd:duration   | 1     | Mandatory | Duration until due          |      | ISO 8601 duration |
+```
+
+---
+
