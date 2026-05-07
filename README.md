@@ -89,165 +89,171 @@ classDiagram
     <<skos:Concept>>
     code : skos:prefLabel [1]
   }
+
+  %% Associations
+  TradeAgreement "1" --> "1" EconomicOperator : buyer
+  TradeAgreement "1" --> "1" EconomicOperator : supplier
+  TradeAgreement "1" --> "1" PaymentTerms : hasPaymentTerms
+  TradeAgreement "1" --> "1" DeliveryTerms : hasDeliveryTerms
+
+  EconomicOperator "1" --> "1" Identifier : identifier
+  Identifier "1" --> "1..*" IdentifierType : type
+
+  PaymentTerms "1" --> "1" MonetaryAmount : transactionAmount
+  PaymentTerms "1" --> "1" PaymentDueCondition : hasPaymentDueCondition
+
+  MonetaryAmount "1" --> "1" CurrencyCode : currency
+  PaymentDueCondition "1" --> "1" EventCode : paymentReferenceEvent
+
+  DeliveryTerms "1" --> "1..*" IncotermCode : incoterm
+  DeliveryTerms "1" --> "0..1" DeliveryLocation : deliveryLocation
+  DeliveryLocation "1" --> "1" Address : address
 ```
 
 ---
 
 ## Class TradeAgreement
-
 URI: ebwv:TradeAgreement
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| identifier | ebwv:identifier | xsd:string | 0..1 | Optional | Identifier of the agreement |
-| agreementDate | ebwv:agreementDate | xsd:dateTime | 1 | Mandatory | Date agreement becomes effective |
-| buyer | ebwv:buyer | ebwv:EconomicOperator | 1 | Mandatory | Buyer party |
-| supplier | ebwv:supplier | ebwv:EconomicOperator | 1 | Mandatory | Supplier party |
-| hasPaymentTerms | ebwv:hasPaymentTerms | ebwv:PaymentTerms | 1 | Mandatory | Payment terms |
-| hasDeliveryTerms | ebwv:hasDeliveryTerms | ebwv:DeliveryTerms | 1 | Mandatory | Delivery terms |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| identifier | ebwv:identifier | xsd:string | 0..1 | Optional |
+| agreementDate | ebwv:agreementDate | xsd:dateTime | 1 | Mandatory |
+| buyer | ebwv:buyer | ebwv:EconomicOperator | 1 | Mandatory |
+| supplier | ebwv:supplier | ebwv:EconomicOperator | 1 | Mandatory |
+| hasPaymentTerms | ebwv:hasPaymentTerms | ebwv:PaymentTerms | 1 | Mandatory |
+| hasDeliveryTerms | ebwv:hasDeliveryTerms | ebwv:DeliveryTerms | 1 | Mandatory |
 
 ---
 
 ## Class EconomicOperator
-
 URI: ebwv:EconomicOperator
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| identifier | ebwv:identifier | ebwv:Identifier | 1 | Mandatory | Identifier of the economic operator |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| identifier | ebwv:identifier | ebwv:Identifier | 1 | Mandatory |
 
 ---
 
 ## Class Identifier
-
 URI: ebwv:Identifier
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| value | ebwv:value | xsd:string | 1 | Mandatory | Identifier value |
-| type | ebwv:type | ebwv:IdentifierType | 1..* | Mandatory | Identifier type |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| value | ebwv:value | xsd:string | 1 | Mandatory |
+| type | ebwv:type | ebwv:IdentifierType | 1..* | Mandatory |
 
 ---
 
 ## Class IdentifierType
-
 URI: ebwv:IdentifierType
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| code | skos:prefLabel | xsd:string | 1 | Mandatory | Identifier type label |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| code | skos:prefLabel | xsd:string | 1 | Mandatory |
 
 ---
 
 ## Class PaymentTerms
-
 URI: ebwv:PaymentTerms
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| transactionAmount | ebwv:transactionAmount | ebwv:MonetaryAmount | 1 | Mandatory | Amount to be paid |
-| hasPaymentDueCondition | ebwv:hasPaymentDueCondition | ebwv:PaymentDueCondition | 1 | Mandatory | When payment is due |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| transactionAmount | ebwv:transactionAmount | ebwv:MonetaryAmount | 1 | Mandatory |
+| hasPaymentDueCondition | ebwv:hasPaymentDueCondition | ebwv:PaymentDueCondition | 1 | Mandatory |
 
 ---
 
 ## Class MonetaryAmount
-
 URI: ebwv:MonetaryAmount
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| value | ebwv:value | xsd:decimal | 0..1 | Optional | Numeric value |
-| currency | ebwv:currency | ebwv:CurrencyCode | 1 | Mandatory | Currency |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| value | ebwv:value | xsd:decimal | 0..1 | Optional |
+| currency | ebwv:currency | ebwv:CurrencyCode | 1 | Mandatory |
 
 ---
 
 ## Class PaymentDueCondition
-
 URI: ebwv:PaymentDueCondition
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| paymentReferenceEvent | ebwv:paymentReferenceEvent | ebwv:EventCode | 1 | Mandatory | Triggering reference event |
-| paymentDueDuration | ebwv:paymentDueDuration | xsd:duration | 1 | Mandatory | Duration until due |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| paymentReferenceEvent | ebwv:paymentReferenceEvent | ebwv:EventCode | 1 | Mandatory |
+| paymentDueDuration | ebwv:paymentDueDuration | xsd:duration | 1 | Mandatory |
 
 ---
 
 ## Class DeliveryTerms
-
 URI: ebwv:DeliveryTerms
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| incoterm | ebwv:incoterm | ebwv:IncotermCode | 1..* | Mandatory | Applicable incoterms |
-| deliveryLocation | ebwv:deliveryLocation | ebwv:DeliveryLocation | 0..1 | Optional | Delivery location |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| incoterm | ebwv:incoterm | ebwv:IncotermCode | 1..* | Mandatory |
+| deliveryLocation | ebwv:deliveryLocation | ebwv:DeliveryLocation | 0..1 | Optional |
 
 ---
 
 ## Class DeliveryLocation
-
 URI: ebwv:DeliveryLocation
 Requirement Level: Optional
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| address | ebwv:address | ebwv:Address | 1 | Mandatory | Delivery address |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| address | ebwv:address | ebwv:Address | 1 | Mandatory |
 
 ---
 
 ## Class Address
-
 URI: ebwv:Address
 Requirement Level: Optional
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| fullAddress | ebwv:fullAddress | xsd:string | 0..1 | Optional | Full address |
-| thoroughfare | ebwv:thoroughfare | xsd:string | 0..1 | Optional | Street name |
-| locatorDesignation | ebwv:locatorDesignation | xsd:string | 0..1 | Optional | Street number |
-| addressArea | ebwv:addressArea | xsd:string | 0..1 | Optional | Address area |
-| postName | ebwv:postName | xsd:string | 1 | Mandatory | Post town |
-| locatorName | ebwv:locatorName | xsd:string | 0..1 | Optional | Building name |
-| adminUnitL2 | ebwv:adminUnitL2 | xsd:string | 1 | Mandatory | Municipality |
-| adminUnitL1 | ebwv:adminUnitL1 | xsd:string | 1 | Mandatory | Region |
-| postCode | ebwv:postCode | xsd:string | 1 | Mandatory | Postal code |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| fullAddress | ebwv:fullAddress | xsd:string | 0..1 | Optional |
+| thoroughfare | ebwv:thoroughfare | xsd:string | 0..1 | Optional |
+| locatorDesignation | ebwv:locatorDesignation | xsd:string | 0..1 | Optional |
+| addressArea | ebwv:addressArea | xsd:string | 0..1 | Optional |
+| postName | ebwv:postName | xsd:string | 1 | Mandatory |
+| locatorName | ebwv:locatorName | xsd:string | 0..1 | Optional |
+| adminUnitL2 | ebwv:adminUnitL2 | xsd:string | 1 | Mandatory |
+| adminUnitL1 | ebwv:adminUnitL1 | xsd:string | 1 | Mandatory |
+| postCode | ebwv:postCode | xsd:string | 1 | Mandatory |
 
 ---
 
 ## Class CurrencyCode
-
 URI: skos:Concept
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| code | skos:prefLabel | xsd:string | 1 | Mandatory | Currency code |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| code | skos:prefLabel | xsd:string | 1 | Mandatory |
 
 ---
 
 ## Class IncotermCode
-
 URI: skos:Concept
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| code | skos:prefLabel | xsd:string | 1 | Mandatory | Incoterm code |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| code | skos:prefLabel | xsd:string | 1 | Mandatory |
 
 ---
 
 ## Class EventCode
-
 URI: skos:Concept
 Requirement Level: Mandatory
 
-| Property | URI | Range | Mult. | Req. | Description |
-|---|---|---|---|---|---|
-| code | skos:prefLabel | xsd:string | 1 | Mandatory | Event code |
+| Property | URI | Range | Mult. | Req. |
+|---|---|---|---|---|
+| code | skos:prefLabel | xsd:string | 1 | Mandatory |
