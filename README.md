@@ -15,7 +15,7 @@ TradeAgreement, EconomicOperator, Identifier, IdentifierType, PaymentTerms, Mone
 
 ---
 
-## Conceptual Model (UML view)
+## UML Model
 
 ```mermaid
 classDiagram
