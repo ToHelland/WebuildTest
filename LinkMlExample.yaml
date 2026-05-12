@@ -1,0 +1,291 @@
+id: https://w3id.org
+name: trade_agreement_profile
+prefixes:
+  ebwv: https://w3id.org
+  xsd: http://w3.org
+  skos: http://w3.org
+  linkml: https://w3id.org
+
+default_prefix: ebwv
+default_range: string
+
+# ==========================================
+# KLASSER
+# ==========================================
+classes:
+  TradeAgreement:
+    class_uri: ebwv:TradeAgreement
+    description: "Normative class for trade agreements."
+    slots:
+      - identifier
+      - agreementDate
+      - buyer
+      - supplier
+      - hasPaymentTerms
+      - hasDeliveryTerms
+
+  EconomicOperator:
+    class_uri: ebwv:EconomicOperator
+    description: "An entity involved in economic activity."
+    slots:
+      - operator_identifier
+
+  Identifier:
+    class_uri: ebwv:Identifier
+    description: "Technical identifier for an entity."
+    slots:
+      - value
+      - identifier_type
+
+  IdentifierType:
+    class_uri: ebwv:IdentifierType
+    description: "Classification or scheme of an identifier."
+    slots:
+      - code
+
+  PaymentTerms:
+    class_uri: ebwv:PaymentTerms
+    description: "Conditions and details regarding payment."
+    slots:
+      - transactionAmount
+      - hasPaymentDueCondition
+
+  MonetaryAmount:
+    class_uri: ebwv:MonetaryAmount
+    description: "A value expressed in a specific currency."
+    slots:
+      - value
+      - currency
+
+  PaymentDueCondition:
+    class_uri: ebwv:PaymentDueCondition
+    description: "Rules for when a payment must be settled."
+    slots:
+      - paymentReferenceEvent
+      - paymentDueDuration
+
+  DeliveryTerms:
+    class_uri: ebwv:DeliveryTerms
+    description: "Conditions and logistics for delivery."
+    slots:
+      - incoterm
+      - deliveryLocation
+
+  DeliveryLocation:
+    class_uri: ebwv:DeliveryLocation
+    description: "Physical or logical place for delivery."
+    slots:
+      - address
+
+  Address:
+    class_uri: ebwv:Address
+    description: "Structured postal address details."
+    slots:
+      - fullAddress
+      - thoroughfare
+      - locatorDesignation
+      - addressArea
+      - postName
+      - locatorName
+      - adminUnitL2
+      - adminUnitL1
+      - postCode
+
+  # --- Abstrakt base for SKOS-konsepter ---
+  CodeConcept:
+    class_uri: skos:Concept
+    abstract: true
+    description: "Abstract base class for all SKOS-based code lists."
+    slots:
+      - code
+
+  CurrencyCode:
+    is_a: CodeConcept
+    description: "ISO currency identifier."
+
+  IncotermCode:
+    is_a: CodeConcept
+    description: "Standard commercial delivery code."
+
+  EventCode:
+    is_a: CodeConcept
+    description: "Triggering event for business processes."
+
+# ==========================================
+# SLOTS (EGENSKAPER)
+# ==========================================
+slots:
+  identifier:
+    slot_uri: ebwv:identifier
+    description: "Identifier of the trade agreement."
+    range: string
+    annotations:
+      note: "External identifier if available."
+
+  agreementDate:
+    slot_uri: ebwv:agreementDate
+    description: "Date and time when the agreement becomes effective."
+    range: datetime
+    required: true
+    annotations:
+      note: "Legally binding start date."
+
+  buyer:
+    slot_uri: ebwv:buyer
+    description: "Economic operator acting as the buyer."
+    range: EconomicOperator
+    required: true
+
+  supplier:
+    slot_uri: ebwv:supplier
+    description: "Economic operator acting as the supplier."
+    range: EconomicOperator
+    required: true
+
+  hasPaymentTerms:
+    slot_uri: ebwv:hasPaymentTerms
+    description: "Payment conditions applicable to the agreement."
+    range: PaymentTerms
+    required: true
+
+  hasDeliveryTerms:
+    slot_uri: ebwv:hasDeliveryTerms
+    description: "Delivery conditions applicable to the agreement."
+    range: DeliveryTerms
+    required: true
+
+  operator_identifier:
+    slot_uri: ebwv:identifier
+    description: "Identifier of the economic operator."
+    range: Identifier
+    required: true
+    annotations:
+      note: "At least one identifier MUST be provided."
+
+  value:
+    slot_uri: ebwv:value
+    description: "Literal value of the identifier."
+    range: string
+    required: true
+
+  identifier_type:
+    slot_uri: ebwv:type
+    description: "Type or scheme of the identifier."
+    range: IdentifierType
+    multivalued: true
+    required: true
+    annotations:
+      note: "Controlled vocabulary."
+
+  code:
+    slot_uri: skos:prefLabel
+    description: "Code identifying the specific type or term."
+    range: string
+    required: true
+    annotations:
+      note: "From specified controlled vocabulary."
+
+  transactionAmount:
+    slot_uri: ebwv:transactionAmount
+    description: "Amount subject to payment."
+    range: MonetaryAmount
+    required: true
+
+  hasPaymentDueCondition:
+    slot_uri: ebwv:hasPaymentDueCondition
+    description: "Condition defining when payment is due."
+    range: PaymentDueCondition
+    required: true
+
+  currency:
+    slot_uri: ebwv:currency
+    description: "Currency of the amount."
+    range: CurrencyCode
+    required: true
+    annotations:
+      note: "ISO 4217 alphabetic code."
+
+  paymentReferenceEvent:
+    slot_uri: ebwv:paymentReferenceEvent
+    description: "Event triggering the payment due period."
+    range: EventCode
+    required: true
+    annotations:
+      note: "Controlled vocabulary."
+
+  paymentDueDuration:
+    slot_uri: ebwv:paymentDueDuration
+    description: "Duration after the event until payment is due."
+    range: duration
+    required: true
+    annotations:
+      note: "ISO 8601 duration."
+
+  incoterm:
+    slot_uri: ebwv:incoterm
+    description: "Applicable INCOTERM(s)."
+    range: IncotermCode
+    multivalued: true
+    required: true
+    annotations:
+      note: "INCOTERMS® 2020."
+
+  deliveryLocation:
+    slot_uri: ebwv:deliveryLocation
+    description: "Location where delivery takes place."
+    range: DeliveryLocation
+
+  address:
+    slot_uri: ebwv:address
+    description: "Address of the delivery location."
+    range: Address
+    required: true
+
+  fullAddress:
+    slot_uri: ebwv:fullAddress
+    description: "Full address as a single string."
+  thoroughfare:
+    slot_uri: ebwv:thoroughfare
+    description: "Street name."
+  locatorDesignation:
+    slot_uri: ebwv:locatorDesignation
+    description: "Street number or similar locator."
+  addressArea:
+    slot_uri: ebwv:addressArea
+    description: "Administrative area within locality."
+  postName:
+    slot_uri: ebwv:postName
+    description: "Post town."
+    required: true
+  locatorName:
+    slot_uri: ebwv:locatorName
+    description: "Building name."
+  adminUnitL2:
+    slot_uri: ebwv:adminUnitL2
+    description: "Municipality."
+    required: true
+  adminUnitL1:
+    slot_uri: ebwv:adminUnitL1
+    description: "Region."
+    required: true
+  postCode:
+    slot_uri: ebwv:postCode
+    description: "Postal code."
+    required: true
+
+# ==========================================
+# TYPER (XSD MAPPING)
+# ==========================================
+types:
+  string:
+    uri: xsd:string
+    base: str
+  datetime:
+    uri: xsd:dateTime
+    base: str
+  decimal:
+    uri: xsd:decimal
+    base: float
+  duration:
+    uri: xsd:duration
+    base: str
